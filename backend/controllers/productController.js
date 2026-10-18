@@ -2,7 +2,7 @@ import Product from "../models/Product.js";
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, mainCollection, category, subcategory } = req.body;
+    const { name, description, price, stock, mainCollection, category, subcategory, isNavratri } = req.body;
 
     if (!name || !description || price == null || stock == null || !mainCollection || !category) {
       return res.status(400).json({
@@ -28,6 +28,7 @@ export const createProduct = async (req, res) => {
       price,
       stock,
       mainCollection,
+      isNavratri: Boolean(isNavratri),
       category,
       subcategory,
       sizes: req.body.sizes || [],
@@ -43,7 +44,7 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const { mainCollection, category, subcategory } = req.query;
+    const { mainCollection, category, subcategory, isNavratri } = req.query;
 
     const filter = {};
     if (mainCollection) {
@@ -57,6 +58,12 @@ export const getProducts = async (req, res) => {
       } else {
         filter.mainCollection = mainCollection;
       }
+    }
+    if (isNavratri === "true") {
+      filter.$or = [
+        { isNavratri: true },
+        { mainCollection: "navratri" }
+      ];
     }
     if (category) filter.category = category;
     if (subcategory && subcategory !== "all") filter.subcategory = subcategory;
@@ -117,5 +124,4 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 

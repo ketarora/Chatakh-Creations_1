@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
 enum: ["threads-of-aura", "colors-of-aura", "accessories", "bandhani", "navratri"],
     default: "threads-of-aura"
   },
+  isNavratri: {
+    type: Boolean,
+    default: false
+  },
   category: {
     type: String,
     enum: ["men", "women", "couple", "unisex"]

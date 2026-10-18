@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import ProductCard from "../components/ProductCard";
 
@@ -20,9 +20,11 @@ const mainCollections = [
 
 const Collections = () => {
   const { mainCollection } = useParams();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get("category") || "";
-  const hasSelectedCollection = Boolean(mainCollection);
+  const isNavratriPage = location.pathname === "/navratri";
+  const hasSelectedCollection = Boolean(mainCollection) || isNavratriPage;
 
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState(
@@ -30,10 +32,12 @@ const Collections = () => {
   );
   const [loading, setLoading] = useState(false);
 
-  const selectedCollection = mainCollections.find((collection) => collection.value === mainCollection);
+  const selectedCollection = isNavratriPage
+    ? { value: "navratri", name: "Navratri Edit" }
+    : mainCollections.find((collection) => collection.value === mainCollection);
 
   useEffect(() => {
-    if (!hasSelectedCollection || !selectedCollection) {
+    if (!hasSelectedCollection || (!selectedCollection && !isNavratriPage)) {
       setProducts([]);
       return;
     }
@@ -41,7 +45,9 @@ const Collections = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const url = `/api/products?mainCollection=${selectedCollection.value}&category=${category}`;
+        const url = isNavratriPage
+          ? `/api/products?isNavratri=true&category=${category}`
+          : `/api/products?mainCollection=${selectedCollection.value}&category=${category}`;
 
         const res = await api.get(url);
         setProducts(Array.isArray(res.data) ? res.data : []);
@@ -54,7 +60,7 @@ const Collections = () => {
     };
 
     fetchProducts();
-  }, [hasSelectedCollection, selectedCollection, category]);
+  }, [hasSelectedCollection, selectedCollection, category, isNavratriPage]);
 
   const categoryOptions = [
     { value: "men", label: "Man" },

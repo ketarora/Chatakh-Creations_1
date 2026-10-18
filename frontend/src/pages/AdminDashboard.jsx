@@ -23,6 +23,7 @@ const AdminDashboard = () => {
     stock: "",
     shippingCharge: "",
     mainCollection: "",
+    isNavratri: false,
     category: "",
     subcategory: "",
   });
@@ -207,6 +208,7 @@ const AdminDashboard = () => {
           price: Number(form.price),
           stock: Number(form.stock),
           shippingCharge: Number(form.shippingCharge) || 0,
+          isNavratri: Boolean(form.isNavratri),
           sizes: ["S", "M", "L", "XL"],
           images: images,
         }
@@ -221,6 +223,7 @@ const AdminDashboard = () => {
         stock: "",
         shippingCharge: "",
         mainCollection: "",
+        isNavratri: false,
         category: "",
         subcategory: "",
       });
@@ -241,6 +244,7 @@ const AdminDashboard = () => {
       stock: p.stock,
       shippingCharge: p.shippingCharge || "",
       mainCollection: p.mainCollection || "",
+      isNavratri: Boolean(p.isNavratri),
       category: p.category,
       subcategory: p.subcategory || "",
     });
@@ -261,6 +265,7 @@ const AdminDashboard = () => {
           price: Number(form.price),
           stock: Number(form.stock),
           shippingCharge: Number(form.shippingCharge) || 0,
+          isNavratri: Boolean(form.isNavratri),
           images: images,
         }
       );
@@ -274,6 +279,7 @@ const AdminDashboard = () => {
         stock: "",
         shippingCharge: "",
         mainCollection: "",
+        isNavratri: false,
         category: "",
         subcategory: "",
       });
@@ -441,6 +447,14 @@ const AdminDashboard = () => {
                 ))}
               </select>
             )}
+            <label className="flex items-center gap-3 border-2 border-gray-200 rounded-xl px-4 py-3 text-slate-900 font-medium">
+              <input
+                type="checkbox"
+                checked={Boolean(form.isNavratri)}
+                onChange={(e) => setForm({ ...form, isNavratri: e.target.checked })}
+              />
+              Show in Navratri Edit
+            </label>
           </div>
 
           <textarea
@@ -567,6 +581,14 @@ const AdminDashboard = () => {
                   ))}
                 </select>
               )}
+              <label className="flex items-center gap-3 border-2 border-gray-200 rounded-xl px-4 py-3 text-slate-900 font-medium">
+                <input
+                  type="checkbox"
+                  checked={Boolean(form.isNavratri)}
+                  onChange={(e) => setForm({ ...form, isNavratri: e.target.checked })}
+                />
+                Show in Navratri Edit
+              </label>
             </div>
 
             <textarea
@@ -633,6 +655,7 @@ const AdminDashboard = () => {
                     stock: "",
                     shippingCharge: "",
                     mainCollection: "",
+                    isNavratri: false,
                     category: "",
                     subcategory: "",
                   });

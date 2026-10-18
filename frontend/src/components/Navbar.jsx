@@ -47,6 +47,13 @@ const Navbar = () => {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#ec0080] group-hover:w-full transition-all duration-300"></span>
           </Link>
           <Link 
+            to="/navratri" 
+            className="text-gray-800 font-medium hover:text-[#ec0080] transition-colors duration-200 relative group text-sm lg:text-base tracking-wide"
+          >
+            Navratri Edit
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#ec0080] group-hover:w-full transition-all duration-300"></span>
+          </Link>
+          <Link 
             to="/cart" 
             className="text-gray-800 font-medium hover:text-[#ec0080] transition-colors duration-200 relative group text-sm lg:text-base tracking-wide"
           >
@@ -138,6 +145,13 @@ const Navbar = () => {
               onClick={() => setMobileMenuOpen(false)}
             >
               Cart
+            </Link>
+            <Link 
+              to="/navratri" 
+              className="text-gray-800 font-medium hover:text-[#ec0080] py-3 px-3 rounded-lg hover:bg-[#fce4f3] transition-colors duration-200 text-base"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Navratri Edit
             </Link>
             <SignedIn>
               <Link 
