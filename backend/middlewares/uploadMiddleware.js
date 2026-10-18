@@ -7,13 +7,19 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "products",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    // Auto-resize on upload: bound within 1400×1800 (never upscale),
+    // best quality/format decided by Cloudinary. Upload originals as-is.
+    transformation: [
+      { width: 1400, height: 1800, crop: "limit", quality: "auto:good", fetch_format: "auto" },
+    ],
   },
 });
 
 const upload = multer({
   storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit per file
+    // Cloudinary free tier allows up to 10MB per asset.
+    fileSize: 10 * 1024 * 1024,
   },
 });
 
