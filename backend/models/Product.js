@@ -15,7 +15,7 @@ enum: ["threads-of-aura", "colors-of-aura", "accessories", "bandhani", "navratri
   },
   category: {
     type: String,
-    enum: ["men", "women", "couple"]
+    enum: ["men", "women", "couple", "unisex"]
   },
   subcategory: String,
   sizes: [String],
