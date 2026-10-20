@@ -10,6 +10,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import { razorpayWebhook } from "./controllers/paymentController.js";
 
 import path from "path";
+import https from "https";
 import { fileURLToPath } from "url";
 import { clerkMiddleware } from "@clerk/express";
 
@@ -68,6 +69,11 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 
+// Health check — for uptime monitors and the keep-alive ping below
+app.get("/api/health", (req, res) => {
+  res.json({ ok: true, t: Date.now() });
+});
+
 // 404 handler for undefined routes
 app.use((req, res) => {
   console.warn("404 - Route not found:", req.method, req.path);
@@ -91,3 +97,20 @@ app.listen(process.env.PORT, () => {
   console.log("  ✓ Razorpay Key ID:", process.env.RAZORPAY_KEY_ID ? "✅ SET" : "❌ MISSING");
   console.log("\n");
 });
+
+// Free-tier keep-alive: Render spins down after 15 min of zero traffic.
+// While the process is alive, ping our own public URL every 10 min — the
+// request goes through Render's edge and resets the idle timer. (A sleeping
+// process cannot wake itself; the first visitor of the day still waits.)
+const SELF_URL = process.env.RENDER_EXTERNAL_URL;
+if (SELF_URL) {
+  const ping = () =>
+    https
+      .get(`${SELF_URL}/api/health`, (r) => {
+        r.resume();
+        console.log(`KEEP-ALIVE ping → ${r.statusCode}`);
+      })
+      .on("error", () => {});
+  setTimeout(ping, 60 * 1000);
+  setInterval(ping, 10 * 60 * 1000);
+}
